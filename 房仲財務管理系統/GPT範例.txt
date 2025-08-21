@@ -1,0 +1,35 @@
+資料表Employee(其P.K.為DS_EEID)、Company(其P.K.為DS_COID)已建立，請幫我寫出下面資料表的SQL server語法，並在建立資料表的同時，做資料表關聯。
+須注意以下幾點：
+1. 資料表需在每個欄位後面加上備註，內容為Attribute所對應的欄位。
+2. 資料表會同時在資料庫中更新，因此每個資料表之間需要有分段。
+3. Colume開頭為「Sys_」為系統欄位
+4. 若資料型態為bit，則須在備註欄位後加上「(0:false, 1:true)」
+5. 若欄位為FOREIGN KEY，則須加上備註「(FK)」
+
+範例如下：
+/*【10. 職務名稱 JobTitles】*/
+CREATE TABLE JobTitles (
+    DS_JTID INT IDENTITY(1,1) PRIMARY KEY,         -- 職稱編號
+    DS_DPTID INT NOT NULL,                         -- 部門編號 (FK)
+    DS_JTName NVARCHAR(50) NOT NULL,               -- 職稱名稱
+
+    /*系統欄位*/
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),	--新增時間
+    Sys_CreatedBy INT NOT NULL,				--新增人員 (FK)
+    Sys_UpdateDT DATETIME NULL,				--修改時間
+    Sys_UpdateBy INT NULL,				--修改人員 (FK)
+    Sys_IsDelete BIT NOT NULL DEFAULT 0,		--是否刪除 (0:false, 1:true)
+    Sys_DeleteDT DATETIME NULL,				--刪除時間
+    Sys_DeleteBy INT NULL,				--刪除人員 (FK)
+
+    /*FK 設定*/
+    CONSTRAINT FK_JobTitles_Departments FOREIGN KEY (DS_DPTID) REFERENCES Departments(DS_DPTID),
+    CONSTRAINT FK_JobTitles_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(DS_EEID),
+    CONSTRAINT FK_JobTitles_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(DS_EEID),
+    CONSTRAINT FK_JobTitles_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(DS_EEID)
+);
+GO
+
+
+請以此分隔線下的資料去作業
+-----------------------------------------------------------------------------
