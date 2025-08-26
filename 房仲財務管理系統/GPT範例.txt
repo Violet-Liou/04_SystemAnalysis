@@ -6,29 +6,38 @@
 4. 若資料型態為bit，則須在備註欄位後加上「(0:false, 1:true)」。
 5. 若欄位為FOREIGN KEY，則須加上備註「(FK)」。
 6. 每個資料表的 FK 都在 CREATE TABLE 內部設定完成，不再使用 ALTER TABLE。
+7. 請注意FK欄位是否為跨資料庫去做關聯 (Note皆有備註)，若為跨資料庫關聯，則不需撰寫有關「FK 設定」，因無法跨資料庫進行欄位的FK關聯。
+8. 每行CONSTRAINT都在同一行撰寫完畢即可
 
 
 格式範例如下(僅當範例參考)：
-/*【10. 職務名稱 JobTitles】*/
-CREATE TABLE JobTitles (
-    DS_JTID INT IDENTITY(1,1) PRIMARY KEY,         -- 職稱編號
-    DS_DPTID INT NOT NULL,                         -- 部門編號 (FK)
-    DS_JTName NVARCHAR(50) NOT NULL,               -- 職稱名稱
+/*【3. 成交案件 DealClosures】*/
+CREATE TABLE DealClosures (
+    DF_DCID INT IDENTITY(1,1) PRIMARY KEY,          			-- 成交案件編號
+    DS_PAID INT NOT NULL,                            				-- 物件編號 (FK, 跨資料庫 DomusOneSysDB)
+    DF_DCTID INT NOT NULL,                           				-- 成交原因編號 (FK)
+    DF_DCDate DATE NOT NULL,                          				-- 成交日期 YYYY/MM/DD
+    DF_DCTotalValue DECIMAL(15,2) NOT NULL DEFAULT 0, 	-- 成交總額
+    DF_DCEstimatedDate DATE NOT NULL,                			-- 預定交屋日 YYYY/MM/DD
+    DF_DCNote NVARCHAR(700) NOT NULL,                		-- 備註
+    DF_CCSID INT NOT NULL,                            				-- 案件佣收狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),	--新增時間
-    Sys_CreatedBy INT NOT NULL,				--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,				--修改時間
-    Sys_UpdateBy INT NULL,				--修改人員 (FK)
-    Sys_IsDelete BIT NOT NULL DEFAULT 0,		--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,				--刪除時間
-    Sys_DeleteBy INT NULL,				--刪除人員 (FK)
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
+    Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK, 跨資料庫 DomusOneSysDB)
+    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間 YYYY/MM/DD hh:mm:ss
+    Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK, 跨資料庫 DomusOneSysDB)
+    Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
+    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間 YYYY/MM/DD hh:mm:ss
+    Sys_DeleteBy INT NULL                                					-- 刪除人員 (FK, 跨資料庫 DomusOneSysDB)
 
     /*FK 設定*/
-    CONSTRAINT FK_JobTitles_Departments FOREIGN KEY (DS_DPTID) REFERENCES Departments(DS_DPTID),
-    CONSTRAINT FK_JobTitles_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(DS_EEID),
-    CONSTRAINT FK_JobTitles_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(DS_EEID),
-    CONSTRAINT FK_JobTitles_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(DS_EEID)
+    CONSTRAINT FK_DealClosures_PropertyAsset FOREIGN KEY (DS_PAID) REFERENCES DomusOneSysDB.dbo.PropertyAsset(DS_PAID),
+    CONSTRAINT FK_DealClosures_DealClosureType FOREIGN KEY (DF_DCTID) REFERENCES DealClosureType(DF_DCTID),
+    CONSTRAINT FK_DealClosures_CaseCommissionStatus FOREIGN KEY (DF_CCSID) REFERENCES CaseCommissionStatus(DF_CCSID),
+    CONSTRAINT FK_DealClosures_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID),
+    CONSTRAINT FK_DealClosures_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID),
+    CONSTRAINT FK_DealClosures_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID)
 );
 GO
 
