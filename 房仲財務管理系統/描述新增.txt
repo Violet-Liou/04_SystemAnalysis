@@ -1,0 +1,43 @@
+資料如下：
+39	 Entity：	每月出勤統計		Table Name : 		ATMonthlySummary
+Attribute	Colume	DataType	Length	isNull	Key	Note
+每月出勤統計編號	AMSID	int	--	N	P.K	identity(1,1)
+員工編號	EEID	int	--	N	F.K	ref. Employee.EEID
+統計月份	AMSMonth	char	7	N		EX：2025/07
+出勤天數	AMSDays	int	--	N		default 0 
+遲到次數	AMSLate	int	--	N		default 0 
+請假時數	AMSLeave	int	--	N		default 0 
+加班時數	AMSOvertime	int	--	N		default 0 
+新增時間	Sys_CreatedDT	datetime	--	N		default getdate() YYYY/MM/DD hh:mm:ss
+新增人員	Sys_CreatedBy	int	--	N	F.K	ref. Employee.EEID
+修改時間	Sys_UpdateDT	datetime	--	Y		YYYY/MM/DD hh:mm:ss
+修改人員	Sys_UpdateBy	int	--	Y	F.K	ref. Employee.EEID
+
+
+SQL server語法如下：
+/*【39. 每月出勤統計 ATMonthlySummary】*/
+CREATE TABLE ATMonthlySummary (
+    AMSID INT IDENTITY(1,1) PRIMARY KEY,       	-- 每月出勤統計編號
+    EEID INT NOT NULL,                          		-- 員工編號 (FK)
+    AMSMonth CHAR(7) NOT NULL,                  	-- 統計月份 (EX：2025/07)
+    AMSDays INT NOT NULL DEFAULT 0,             	-- 出勤天數
+    AMSLate INT NOT NULL DEFAULT 0,             	-- 遲到次數
+    AMSLeave INT NOT NULL DEFAULT 0,		-- 請假時數
+    AMSOvertime INT NOT NULL DEFAULT 0,	-- 加班時數
+
+    /*系統欄位*/
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
+    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
+
+    /*FK 設定*/
+    CONSTRAINT FK_ATMonthlySummary_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
+    CONSTRAINT FK_ATMonthlySummary_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_ATMonthlySummary_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+);
+GO
+
+----------------------------------------------------------------------------------------------------
+訴求：我想要在SQL server語法中，再加上能同時新增SQL server中「描述」的語法，因會同時生成多個表，我希望能每個表在create時，就能將描述同時建進去。每個欄位描述皆以單行新增完畢。
+另，協助檢查資料與SQL server語法之間有沒有欄位對不上、關聯之類的錯誤

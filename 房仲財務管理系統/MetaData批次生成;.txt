@@ -1,0 +1,194 @@
+using System;
+using System.Data.SqlClient;
+using System.IO;
+using System.Text;
+using System.ComponentModel.DataAnnotations;
+
+class MetadataGenerator
+{
+    static void Main()
+    {
+        string connectionString = "Data Source=C501A19;Database=GoodStore;TrustServerCertificate=True;User ID=abcd;Password=1234";
+        string outputDir = @"C:\YourProject\Models\Metadata"; 
+        string schemaName = "dbo";
+
+        Directory.CreateDirectory(outputDir);
+
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            conn.Open();
+
+            var tableCmd = new SqlCommand(@"
+                SELECT TABLE_NAME 
+                FROM INFORMATION_SCHEMA.TABLES
+                WHERE TABLE_SCHEMA = @SchemaName AND TABLE_TYPE = 'BASE TABLE'", conn);
+            tableCmd.Parameters.AddWithValue("@SchemaName", schemaName);
+
+            var tableReader = tableCmd.ExecuteReader();
+
+            while (tableReader.Read())
+            {
+                string tableName = tableReader["TABLE_NAME"].ToString();
+                GenerateMetadataForTable(conn, schemaName, tableName, outputDir);
+            }
+
+            tableReader.Close();
+        }
+
+        Console.WriteLine("所有 Metadata 檔案生成完成！");
+    }
+
+    static void GenerateMetadataForTable(SqlConnection conn, string schemaName, string tableName, string outputDir)
+    {
+        var cmd = new SqlCommand(@"
+            SELECT c.name AS ColumnName,
+                   t.name AS DataType,
+                   c.is_nullable,
+                   c.max_length,
+                   ep.value AS ColumnDescription
+            FROM sys.columns c
+            INNER JOIN sys.types t ON c.user_type_id = t.user_type_id
+            LEFT JOIN sys.extended_properties ep
+                ON ep.major_id = c.object_id
+                AND ep.minor_id = c.column_id
+                AND ep.name = 'MS_Description'
+            WHERE c.object_id = OBJECT_ID(@TableFullName)
+            ORDER BY c.column_id", conn);
+
+        cmd.Parameters.AddWithValue("@TableFullName", $"{schemaName}.{tableName}");
+
+        var reader = cmd.ExecuteReader();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("using System;");
+        sb.AppendLine("using System.ComponentModel.DataAnnotations;");
+        sb.AppendLine();
+        sb.AppendLine($"namespace YourProject.Models.Metadata");
+        sb.AppendLine("{");
+
+        sb.AppendLine($"    public class {tableName}Metadata");
+        sb.AppendLine("    {");
+
+        while (reader.Read())
+        {
+            string columnName = reader["ColumnName"].ToString();
+            string sqlType = reader["DataType"].ToString();
+            bool isNullable = (bool)reader["is_nullable"];
+            int maxLength = Convert.ToInt32(reader["max_length"]);
+            string description = reader["ColumnDescription"]?.ToString() ?? columnName;
+
+            string csharpType = SqlTypeToCSharpType(sqlType, isNullable);
+            string dataAnnotation = GetDataAnnotation(sqlType, isNullable, maxLength, columnName);
+
+            sb.AppendLine($"        [Display(Name = \"{description}\")]");
+            if (!string.IsNullOrEmpty(dataAnnotation))
+            {
+                sb.AppendLine($"        {dataAnnotation}");
+            }
+            sb.AppendLine($"        public {csharpType} {columnName} {{ get; set; }}");
+            sb.AppendLine();
+        }
+
+        sb.AppendLine("    }");
+        sb.AppendLine();
+
+        sb.AppendLine($"    [MetadataType(typeof({tableName}Metadata))]");
+        sb.AppendLine($"    public partial class {tableName}");
+        sb.AppendLine("    { }");
+
+        sb.AppendLine("}");
+
+        reader.Close();
+
+        string filePath = Path.Combine(outputDir, $"{tableName}Metadata.cs");
+        File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
+
+        Console.WriteLine($"生成 Metadata：{tableName}Metadata.cs");
+    }
+
+    static string SqlTypeToCSharpType(string sqlType, bool isNullable)
+    {
+        string csharpType = sqlType switch
+        {
+            "int" => "int",
+            "bigint" => "long",
+            "smallint" => "short",
+            "tinyint" => "byte",
+            "bit" => "bool",
+            "decimal" => "decimal",
+            "numeric" => "decimal",
+            "money" => "decimal",
+            "smallmoney" => "decimal",
+            "float" => "double",
+            "real" => "float",
+            "date" => "DateTime",
+            "datetime" => "DateTime",
+            "datetime2" => "DateTime",
+            "smalldatetime" => "DateTime",
+            "time" => "TimeSpan",
+            "char" => "string",
+            "nchar" => "string",
+            "varchar" => "string",
+            "nvarchar" => "string",
+            "text" => "string",
+            "ntext" => "string",
+            "uniqueidentifier" => "Guid",
+            "binary" => "byte[]",
+            "varbinary" => "byte[]",
+            "image" => "byte[]",
+            _ => "object"
+        };
+
+        if (csharpType != "string" && csharpType != "byte[]" && isNullable)
+            csharpType += "?";
+
+        return csharpType;
+    }
+
+    static string GetDataAnnotation(string sqlType, bool isNullable, int maxLength, string columnName)
+    {
+        var sb = new StringBuilder();
+
+        // Required
+        if (!isNullable && sqlType != "timestamp")
+            sb.AppendLine("        [Required]");
+
+        // StringLength
+        if (sqlType == "nvarchar" || sqlType == "varchar" || sqlType == "nchar" || sqlType == "char")
+        {
+            if (maxLength > 0 && maxLength != -1)
+                sb.AppendLine($"        [StringLength({maxLength})]");
+        }
+
+        // DataType / DisplayFormat
+        switch (sqlType)
+        {
+            case "date":
+            case "datetime":
+            case "datetime2":
+            case "smalldatetime":
+                sb.AppendLine("        [DataType(DataType.Date)]");
+                sb.AppendLine("        [DisplayFormat(DataFormatString = \"{0:yyyy-MM-dd}\", ApplyFormatInEditMode = true)]");
+                break;
+            case "time":
+                sb.AppendLine("        [DataType(DataType.Time)]");
+                break;
+            case "money":
+            case "smallmoney":
+            case "decimal":
+            case "numeric":
+            case "float":
+            case "real":
+                sb.AppendLine("        [DataType(DataType.Currency)]");
+                break;
+        }
+
+        // Email 判斷
+        if (columnName.ToLower().Contains("email"))
+        {
+            sb.AppendLine("        [DataType(DataType.EmailAddress)]");
+        }
+
+        return sb.ToString().TrimEnd();
+    }
+}
