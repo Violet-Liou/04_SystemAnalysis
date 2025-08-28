@@ -273,7 +273,10 @@ GO
 CREATE TABLE CompanyProfileItem (
     CPIID INT IDENTITY(1,1) PRIMARY KEY,         -- 公司內部資訊項目編號
     CPIName NVARCHAR(30) NOT NULL,           -- 公司內部資訊項目名稱
-    CPIIsActive BIT NOT NULL DEFAULT 1           -- 是否啟用 (0:false, 1:true)
+    CPIIsActive BIT NOT NULL DEFAULT 1,           -- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_CompanyProfileItem_IsActive CHECK (CPIIsActive IN (0,1))
 );
 GO
 -- 為表格新增描述
@@ -489,8 +492,10 @@ GO
 CREATE TABLE JobAssignmentReason (
     JARID INT IDENTITY(1,1) PRIMARY KEY, 		-- 任職原因編號
     JARName NVARCHAR(20) NOT NULL, 		-- 任職原因名稱
-    JARIsActive BIT NOT NULL DEFAULT 1		-- 是否啟用 (0:false, 1:true)
+    JARIsActive BIT NOT NULL DEFAULT 1,		-- 是否啟用 (0:false, 1:true)
 
+    /*CHECK 設定*/
+    CONSTRAINT CHK_JobAssignmentReason_IsActive CHECK (JARIsActive IN (0,1))
 );
 GO
 -- 為表格新增描述
@@ -641,7 +646,10 @@ CREATE TABLE CompanySalaryStructure (
     CONSTRAINT FK_CompanySalaryStructure_CalculationUnits FOREIGN KEY (CUID) REFERENCES CalculationUnits(CUID),
     CONSTRAINT FK_CompanySalaryStructure_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
     CONSTRAINT FK_CompanySalaryStructure_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_CompanySalaryStructure_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_CompanySalaryStructure_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_CompanySalaryStructure_CSSDefault CHECK (CSSDefault >= 0)
 );
 GO
 -- 為表格新增描述
@@ -685,7 +693,10 @@ CREATE TABLE EmployeePayrollProfile (
     /*FK 設定*/
     CONSTRAINT FK_EmployeePayrollProfile_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
     CONSTRAINT FK_EmployeePayrollProfile_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_EmployeePayrollProfile_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_EmployeePayrollProfile_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_EmployeePayrollProfile_EPPAdminTotal CHECK (EPPAdminTotal >= 0)
 );
 GO
 -- 為表格新增描述
@@ -729,7 +740,10 @@ CREATE TABLE EmployeeCompensation (
     CONSTRAINT FK_EmployeeCompensation_CalculationUnits FOREIGN KEY (CUID) REFERENCES CalculationUnits(CUID),
     CONSTRAINT FK_EmployeeCompensation_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
     CONSTRAINT FK_EmployeeCompensation_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_EmployeeCompensation_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_EmployeeCompensation_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_EmployeeCompensation_ESAmount CHECK (ESAmount >= 0)
 );
 GO
 -- 為表格新增描述
@@ -761,7 +775,10 @@ CREATE TABLE BankBranches (
     BBIsActive BIT NOT NULL DEFAULT 1,			-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE() 	-- 新增時間
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_BankBranches_IsActive CHECK (BBIsActive IN (0,1))
 );
 GO
 -- 為表格新增描述
@@ -798,7 +815,10 @@ CREATE TABLE EmployeeBankAccounts (
     CONSTRAINT FK_EBA_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
     CONSTRAINT FK_EBA_BankBranches FOREIGN KEY (BBID) REFERENCES BankBranches(BBID),
     CONSTRAINT FK_EBA_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_EBA_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_EBA_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_EmployeeBankAccounts_IsActive CHECK (EBAIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -823,7 +843,10 @@ GO
 CREATE TABLE AuthorizationType (
     ATID INT IDENTITY(1,1) PRIMARY KEY,          	-- 權限類別編號
     ATName NVARCHAR(100) NOT NULL,		-- 權限類別名稱
-    ATIsActive BIT NOT NULL DEFAULT 1            	-- 是否啟用 (0:false, 1:true)
+    ATIsActive BIT NOT NULL DEFAULT 1,            	-- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_AuthorizationType_IsActive CHECK (ATIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -840,8 +863,8 @@ GO
 CREATE TABLE AuthorizationItem (
     AIID INT IDENTITY(1,1) PRIMARY KEY,          	-- 權限項目編號
     ATID INT NOT NULL,                           		-- 權限類別編號 (FK)
-    ATName NVARCHAR(100) NOT NULL,		-- 權限項目名稱
-    ATIsActive BIT NOT NULL DEFAULT 1,		-- 是否有效 (0:false, 1:true)
+    AIName NVARCHAR(100) NOT NULL,		-- 權限項目名稱
+    AIIsActive BIT NOT NULL DEFAULT 1,		-- 是否有效 (0:false, 1:true)
 
     /*系統欄位*/
     Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		-- 新增時間
@@ -852,7 +875,10 @@ CREATE TABLE AuthorizationItem (
     /*FK 設定*/
     CONSTRAINT FK_AI_AuthorizationType FOREIGN KEY (ATID) REFERENCES AuthorizationType(ATID),
     CONSTRAINT FK_AI_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_AI_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_AI_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_AI_IsActive CHECK (AIIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -860,8 +886,8 @@ EXEC sp_addextendedproperty N'MS_Description', N'權限項目表', N'Schema', N'
 -- 欄位描述
 EXEC sp_addextendedproperty N'MS_Description', N'權限項目編號', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'AIID';
 EXEC sp_addextendedproperty N'MS_Description', N'權限類別', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'ATID';
-EXEC sp_addextendedproperty N'MS_Description', N'權限項目', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'ATName';
-EXEC sp_addextendedproperty N'MS_Description', N'是否有效', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'ATIsActive';
+EXEC sp_addextendedproperty N'MS_Description', N'權限項目', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'AIName';
+EXEC sp_addextendedproperty N'MS_Description', N'是否有效', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'AIIsActive';
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'AuthorizationItem', N'Column', N'Sys_UpdateDT';
@@ -895,7 +921,10 @@ GO
 CREATE TABLE SysLoginReason (
     SLRID INT IDENTITY(1,1) PRIMARY KEY,    	-- 原因編號
     SLRReason NVARCHAR(20) NOT NULL,         	-- 原因
-    SLRIsActive BIT NOT NULL DEFAULT 1        	-- 是否啟用 (0:false, 1:true)
+    SLRIsActive BIT NOT NULL DEFAULT 1,        	-- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_SysLoginReason_IsActive CHECK (SLRIsActive IN (0,1))
 );
 GO
 -- 表格描述

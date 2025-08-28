@@ -1,4 +1,4 @@
-資料表Employee(其P.K.為DS_EEID)、Company(其P.K.為DS_COID)已建立，請幫我寫出下面資料表的SQL server語法，並在建立資料表的同時，做資料表關聯。
+資料表Employee(其P.K.為EEID)、Company(其P.K.為COID)已建立，請幫我寫出下面資料表的SQL server語法，並在建立資料表的同時，做資料表關聯。
 須注意以下幾點：
 1. 資料表需在每個欄位後面加上備註，內容為Attribute所對應的欄位。
 2. 資料表會同時在資料庫中更新，因此每個資料表之間需要有分段。
@@ -6,39 +6,51 @@
 4. 若資料型態為bit，則須在備註欄位後加上「(0:false, 1:true)」。
 5. 若欄位為FOREIGN KEY，則須加上備註「(FK)」。
 6. 每個資料表的 FK 都在 CREATE TABLE 內部設定完成，不再使用 ALTER TABLE。
-7. 請注意FK欄位是否為跨資料庫去做關聯 (Note皆有備註)，若為跨資料庫關聯，則不需撰寫有關「FK 設定」，因無法跨資料庫進行欄位的FK關聯。
-8. 每行CONSTRAINT都在同一行撰寫完畢即可
+7. 每行CONSTRAINT都在同一行撰寫完畢即可
+8. 上能同時新增SQL server中「描述」的語法，因會同時生成多個表，我希望能每個表在create時，就能將描述同時建進去。每個欄位描述皆以單行新增完畢。描述內容完全依照Attribute。
+9. 若資料型態有更好的選擇，也可作建議給我
+10. 請做出完整的、可被複製的SQL server語法
+11. 請替我適當加上一些check，以「/*CHECK 設定*/」與FK設定做分隔
+
 
 
 格式範例如下(僅當範例參考)：
-/*【3. 成交案件 DealClosures】*/
-CREATE TABLE DealClosures (
-    DF_DCID INT IDENTITY(1,1) PRIMARY KEY,          			-- 成交案件編號
-    DS_PAID INT NOT NULL,                            				-- 物件編號 (FK, 跨資料庫 DomusOneSysDB)
-    DF_DCTID INT NOT NULL,                           				-- 成交原因編號 (FK)
-    DF_DCDate DATE NOT NULL,                          				-- 成交日期 YYYY/MM/DD
-    DF_DCTotalValue DECIMAL(15,2) NOT NULL DEFAULT 0, 	-- 成交總額
-    DF_DCEstimatedDate DATE NOT NULL,                			-- 預定交屋日 YYYY/MM/DD
-    DF_DCNote NVARCHAR(700) NOT NULL,                		-- 備註
-    DF_CCSID INT NOT NULL,                            				-- 案件佣收狀態編號 (FK)
+/*【39. 每月出勤統計 ATMonthlySummary】*/
+CREATE TABLE ATMonthlySummary (
+    AMSID INT IDENTITY(1,1) PRIMARY KEY,       	-- 每月出勤統計編號
+    EEID INT NOT NULL,                          		-- 員工編號 (FK)
+    AMSMonth CHAR(7) NOT NULL,                  	-- 統計月份 (EX：2025/07)
+    AMSDays INT NOT NULL DEFAULT 0,             	-- 出勤天數
+    AMSLate INT NOT NULL DEFAULT 0,             	-- 遲到次數
+    AMSLeave INT NOT NULL DEFAULT 0,		-- 請假時數
+    AMSOvertime INT NOT NULL DEFAULT 0,	-- 加班時數
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
-    Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK, 跨資料庫 DomusOneSysDB)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間 YYYY/MM/DD hh:mm:ss
-    Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK, 跨資料庫 DomusOneSysDB)
-    Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間 YYYY/MM/DD hh:mm:ss
-    Sys_DeleteBy INT NULL                                					-- 刪除人員 (FK, 跨資料庫 DomusOneSysDB)
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
+    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
-    CONSTRAINT FK_DealClosures_PropertyAsset FOREIGN KEY (DS_PAID) REFERENCES DomusOneSysDB.dbo.PropertyAsset(DS_PAID),
-    CONSTRAINT FK_DealClosures_DealClosureType FOREIGN KEY (DF_DCTID) REFERENCES DealClosureType(DF_DCTID),
-    CONSTRAINT FK_DealClosures_CaseCommissionStatus FOREIGN KEY (DF_CCSID) REFERENCES CaseCommissionStatus(DF_CCSID),
-    CONSTRAINT FK_DealClosures_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID),
-    CONSTRAINT FK_DealClosures_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID),
-    CONSTRAINT FK_DealClosures_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES DomusOneSysDB.dbo.Employee(DS_EEID)
+    CONSTRAINT FK_ATMonthlySummary_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
+    CONSTRAINT FK_ATMonthlySummary_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_ATMonthlySummary_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
 );
+GO
+-- 表格描述
+EXEC sp_addextendedproperty N'MS_Description', N'每月出勤統計表', N'Schema', N'dbo', N'Table', N'ATMonthlySummary';
+-- 欄位描述
+EXEC sp_addextendedproperty N'MS_Description', N'每月出勤統計編號', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSID';
+EXEC sp_addextendedproperty N'MS_Description', N'人員', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'EEID';
+EXEC sp_addextendedproperty N'MS_Description', N'統計月份', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSMonth';
+EXEC sp_addextendedproperty N'MS_Description', N'出勤天數', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSDays';
+EXEC sp_addextendedproperty N'MS_Description', N'遲到次數', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSLate';
+EXEC sp_addextendedproperty N'MS_Description', N'請假時數', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSLeave';
+EXEC sp_addextendedproperty N'MS_Description', N'加班時數', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'AMSOvertime';
+EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'Sys_CreatedDT';
+EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'Sys_CreatedBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'Sys_UpdateDT';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'ATMonthlySummary', N'Column', N'Sys_UpdateBy';
 GO
 
 

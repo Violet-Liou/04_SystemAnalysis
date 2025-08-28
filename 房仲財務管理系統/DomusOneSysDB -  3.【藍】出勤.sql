@@ -44,7 +44,10 @@ GO
 CREATE TABLE SpecialWorkTimeReason (
     SWTRID INT IDENTITY(1,1) PRIMARY KEY,          	-- 特殊工時調整原因編號
     SWTReason NVARCHAR(50) NOT NULL,			-- 特殊工時調整原因
-    SWTRIsActive BIT NOT NULL DEFAULT 1            	-- 是否啟用 (0:false, 1:true)
+    SWTRIsActive BIT NOT NULL DEFAULT 1,            	-- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_SpecialWorkTimeReason_IsActive CHECK (SWTRIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -77,7 +80,10 @@ CREATE TABLE SpecialWorkTime (
     CONSTRAINT FK_SpecialWorkTime_Company FOREIGN KEY (COID) REFERENCES Company(COID),
     CONSTRAINT FK_SpecialWorkTime_Reason FOREIGN KEY (SWTRID) REFERENCES SpecialWorkTimeReason(SWTRID),
     CONSTRAINT FK_SpecialWorkTime_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_SpecialWorkTime_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_SpecialWorkTime_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_SpecialWorkTime_IsOverride CHECK (SWTIsOverride IN (0,1))
 );
 GO
 
@@ -105,6 +111,9 @@ CREATE TABLE AttendanceStatus (
     ASID INT IDENTITY(1,1) PRIMARY KEY,          	-- 出勤狀態編號
     ASName NVARCHAR(30) NOT NULL	, 	-- 狀態名稱
     ASIsActive BIT NOT NULL DEFAULT 1,           	-- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_AttendanceStatus_IsActive CHECK (ASIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -213,7 +222,10 @@ CREATE TABLE LeaveType (
 
     /*FK 設定*/
     CONSTRAINT FK_LeaveType_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_LeaveType_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_LeaveType_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_LeaveType_IsActive CHECK (LTIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -331,6 +343,9 @@ CREATE TABLE ATExceptionReason (
     AERID INT IDENTITY(1,1) PRIMARY KEY,        	-- 出勤異常原因編號
     AERReason NVARCHAR(20) NOT NULL,		-- 出勤異常原因
     AERIsActive BIT NOT NULL DEFAULT 1,         	-- 是否啟用 (0:false, 1:true)
+
+    /*CHECK 設定*/
+    CONSTRAINT CHK_ATExceptionReason_IsActive CHECK (AERIsActive IN (0,1))
 );
 GO
 -- 表格描述
