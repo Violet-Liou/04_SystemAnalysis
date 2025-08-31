@@ -133,3 +133,50 @@ EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_UpdateDT';
 EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_UpdateBy';
 GO
+
+
+/*【117. 人員規章套用 BonusStructureAssignment】*/
+CREATE TABLE BonusStructureAssignment (
+    BSAID INT IDENTITY(1,1) PRIMARY KEY,         	-- 人員規章套用編號
+    EEID INT NOT NULL,                           			-- 員工編號 (FK)
+    BSID NVARCHAR(7) NOT NULL,                   	-- 獎金規章編號 (FK)
+    BSADate_S DATE NOT NULL,                     		-- 套用起始日
+    BSADate_E DATE NOT NULL,                     		-- 套用截止日
+    BSAMentor INT NULL,                          			-- 回饋人員(員工編號) (FK)
+    BSANote NVARCHAR(100) NULL,                  	-- 備註
+
+    /*系統欄位*/
+    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedBy INT NOT NULL,                         	 				-- 新增人員 (FK)
+    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
+
+    /*CHECK 設定*/
+    CONSTRAINT CK_BonusStructureAssignment_Date CHECK (BSADate_E >= BSADate_S),
+
+    /*FK 設定*/
+    CONSTRAINT FK_BSA_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BSA_BonusStructure FOREIGN KEY (BSID) REFERENCES BonusStructure(BSID),
+    CONSTRAINT FK_BSA_Mentor FOREIGN KEY (BSAMentor) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BSA_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BSA_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+);
+GO
+
+-- 表格描述
+EXEC sp_addextendedproperty N'MS_Description', N'人員規章套用表', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment';
+
+-- 欄位描述
+EXEC sp_addextendedproperty N'MS_Description', N'人員規章套用編號', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSAID';
+EXEC sp_addextendedproperty N'MS_Description', N'人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'EEID';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金規章編號', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSID';
+EXEC sp_addextendedproperty N'MS_Description', N'套用起始日', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSADate_S';
+EXEC sp_addextendedproperty N'MS_Description', N'套用截止日', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSADate_E';
+EXEC sp_addextendedproperty N'MS_Description', N'回饋人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSAMentor';
+EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSANote';
+EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_CreatedDT';
+EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_CreatedBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_UpdateDT';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_UpdateBy';
+GO
+
