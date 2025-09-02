@@ -52,12 +52,12 @@ CREATE TABLE DealClosures (
     CCSID INT NOT NULL,                           				-- 案件佣收狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,              				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                        				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                        				-- 刪除時間
     Sys_DeleteBy INT NULL                              					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -104,9 +104,9 @@ CREATE TABLE YCCharityFund (
     YCFInternalAmt DECIMAL(7,2) NOT NULL DEFAULT 0,    	-- 體系內部金額(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                                					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -171,16 +171,16 @@ CREATE TABLE CaseCommissionMain (
     CCSID INT NOT NULL,                          				-- 案件佣收狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               					-- 刪除人員 (FK)
-    Sys_SubmitDT DATETIME NULL,                          				-- 提交時間
+    Sys_SubmitDT DATETIME2 NULL,                          				-- 提交時間
     Sys_SubmitBy INT NULL,                               					-- 提交人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                        				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                        				-- 審核時間
     Sys_ApprovedBy INT NULL                               				-- 審核人員 (FK)
 
     /*FK 設定*/
@@ -234,9 +234,9 @@ CREATE TABLE CaseCommissionDetail (
     CCDGuarAmount DECIMAL(15,2) NOT NULL DEFAULT 0,  	-- 履保金額(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -275,7 +275,7 @@ CREATE TABLE CommissionEntryType (
     CETIsActive BIT NOT NULL DEFAULT 1,        	-- 是否啟用 (0:false, 1:true)
 
     /*CHECK 設定*/
-    ,CONSTRAINT CHK_CommissionEntryType_CETType CHECK (CETType IN ('0','1'))
+    CONSTRAINT CHK_CommissionEntryType_CETType CHECK (CETType IN ('0','1'))
 );
 GO
 -- 表格描述
@@ -297,9 +297,9 @@ CREATE TABLE CommissionEntry (
     CENote NVARCHAR(100) NULL,                    			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -337,9 +337,9 @@ CREATE TABLE CaseCommissionCustomer (
     CCCNote NVARCHAR(100) NULL,                   			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -375,9 +375,9 @@ CREATE TABLE CommissionPerfAllocation (
     CPANote NVARCHAR(100) NULL,                    			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -397,7 +397,7 @@ GO
 -- 表格描述
 EXEC sp_addextendedproperty N'MS_Description', N'業績分配表', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation';
 -- 欄位描述
-EXEC sp_addextendedproperty N'MS_Description', N'業績分配編號', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation', N'Column', N'CPAAID';
+EXEC sp_addextendedproperty N'MS_Description', N'業績分配編號', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation', N'Column', N'CPAID';
 EXEC sp_addextendedproperty N'MS_Description', N'案件佣收單', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation', N'Column', N'CCMID';
 EXEC sp_addextendedproperty N'MS_Description', N'人員', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation', N'Column', N'EEID';
 EXEC sp_addextendedproperty N'MS_Description', N'任職記錄編號', N'Schema', N'dbo', N'Table', N'CommissionPerfAllocation', N'Column', N'JAID';
@@ -469,9 +469,9 @@ CREATE TABLE ARAPTransaction (
     AATNote NVARCHAR(100) NULL,                          		-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -520,9 +520,9 @@ CREATE TABLE ARAPTransactionLog (
     ATLNote NVARCHAR(100) NULL,                    -- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -611,9 +611,9 @@ CREATE TABLE InvoiceMain (
     ISID INT NOT NULL,                                					-- 發票狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                       					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -660,17 +660,17 @@ CREATE TABLE InvoiceDetail (
     IMID INT NOT NULL,                        			-- 發票主檔編號 (FK)
     IDItem NVARCHAR(50) NOT NULL,             	-- 發票明細
     IDAmount DECIMAL(15,2) NOT NULL,          	-- 金額(元)
-    CIID INT NULL,                             			-- 佣收項目編號 (FK)
+    CEID INT NULL,                             			-- 佣收項目編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
     CONSTRAINT FK_InvoiceDetail_InvoiceMain FOREIGN KEY (IMID) REFERENCES InvoiceMain(IMID),
-    CONSTRAINT FK_InvoiceDetail_CommissionItem FOREIGN KEY (CIID) REFERENCES CommissionItem(CIID),
+    CONSTRAINT FK_InvoiceDetail_CommissionEntry FOREIGN KEY (CEID) REFERENCES CommissionEntry(CEID),
     CONSTRAINT FK_InvoiceDetail_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
     CONSTRAINT FK_InvoiceDetail_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
 
@@ -685,7 +685,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'發票明細編號', N'Schema',
 EXEC sp_addextendedproperty N'MS_Description', N'發票主檔編號', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'IMID';
 EXEC sp_addextendedproperty N'MS_Description', N'發票明細', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'IDItem';
 EXEC sp_addextendedproperty N'MS_Description', N'金額(元)', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'IDAmount';
-EXEC sp_addextendedproperty N'MS_Description', N'佣收項目', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'CIID';
+EXEC sp_addextendedproperty N'MS_Description', N'佣收項目', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'CEID';
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'InvoiceDetail', N'Column', N'Sys_UpdateDT';

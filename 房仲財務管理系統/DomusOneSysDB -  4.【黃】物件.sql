@@ -30,9 +30,9 @@ CREATE TABLE ContractOrderMain (
     COMNote NVARCHAR(100) NULL,             	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -68,9 +68,9 @@ CREATE TABLE ContractOrderDetail (
     CODDiscount INT NOT NULL DEFAULT 0,     	-- 折扣
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -112,9 +112,9 @@ CREATE TABLE ContractReceivingDetail (
     CRDNote NVARCHAR(100) NULL,        		-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -173,9 +173,9 @@ CREATE TABLE ContractMain (
     CMNote NVARCHAR(100) NULL,               	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                                  					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -212,7 +212,7 @@ CREATE TABLE ContractRevisionLog (
     CUSID INT NOT NULL,				-- 契據使用狀況編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                             				-- 新增人員 (FK)
 
     /*FK 設定*/
@@ -245,11 +245,11 @@ CREATE TABLE ContractApplication (
     APSID INT NOT NULL,                       		-- 申請狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                        				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                        				-- 審核時間
     Sys_ApprovedBy INT NULL                               				-- 審核人員 (FK)
 
     /*FK 設定*/
@@ -285,9 +285,9 @@ CREATE TABLE ContractApplicationDetail (
     CADAmount INT NOT NULL,                   		-- 申請數量
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -319,17 +319,17 @@ CREATE TABLE ContractOwnershipChange (
     COCID INT IDENTITY(1,1) PRIMARY KEY,       		-- 契據轉讓編號
     CMID VARCHAR(15) NOT NULL,                  		-- 契據編號 (FK)
     COCTransfer INT NOT NULL,                   			-- 轉讓員工編號 (FK)
-    COCTransferDate DATETIME NOT NULL,          	-- 轉讓日期
+    COCTransferDate DATETIME2 NOT NULL,          	-- 轉讓日期
     COCTransferSign NVARCHAR(500) NOT NULL,     	-- 轉讓簽章
     COCReceiver INT NOT NULL,                   		-- 接收員工編號 (FK)
-    COCReceiverDate DATETIME NULL,              		-- 接收日期
+    COCReceiverDate DATETIME2 NULL,              		-- 接收日期
     COCReceiverSign NVARCHAR(500) NULL,        	-- 接收簽章
     COCNote NVARCHAR(100) NULL,                		-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                                					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -395,9 +395,9 @@ CREATE TABLE CommunityInfo (
     CILongitude DECIMAL(10,6) NOT NULL,       	-- 經度
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -495,12 +495,12 @@ CREATE TABLE PropertyAsset (
     PALongitude DECIMAL(10,6) NOT NULL,         	-- 經度
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -536,8 +536,8 @@ EXEC sp_addextendedproperty N'MS_Description', N'物件狀態', N'Schema', N'dbo
 EXEC sp_addextendedproperty N'MS_Description', N'位置圖', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'PAMapPath';
 EXEC sp_addextendedproperty N'MS_Description', N'平面圖', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'PAPlanPath';
 EXEC sp_addextendedproperty N'MS_Description', N'物件介紹', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'PADescription';
-EXEC sp_addextendedproperty N'MS_Description', N'緯度', N'Schema', N'dbo', N'Table', N'Column', N'PALatitude';
-EXEC sp_addextendedproperty N'MS_Description', N'經度', N'Schema', N'dbo', N'Table', N'Column', N'PALongitude';
+EXEC sp_addextendedproperty N'MS_Description', N'緯度', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'PALatitude';
+EXEC sp_addextendedproperty N'MS_Description', N'經度', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'PALongitude';
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'Sys_UpdateDT';
@@ -546,6 +546,57 @@ EXEC sp_addextendedproperty N'MS_Description', N'是否刪除', N'Schema', N'dbo
 EXEC sp_addextendedproperty N'MS_Description', N'刪除時間', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'Sys_DeleteDT';
 EXEC sp_addextendedproperty N'MS_Description', N'刪除人員', N'Schema', N'dbo', N'Table', N'PropertyAsset', N'Column', N'Sys_DeleteBy';
 GO
+
+
+
+/*【55-1. 物件合約異動紀錄 PropertyAssetRecord】*/
+CREATE TABLE PropertyAssetRecord (
+    PARID INT IDENTITY(1,1) PRIMARY KEY,                		-- 物件合約異動紀錄編號
+    PAID INT NOT NULL,                                  			-- 物件編號 (FK)
+    PARStartDate DATE NOT NULL,                        	 	-- 合約起始日
+    PAREndDate DATE NOT NULL,                           		-- 合約結束日
+    PATID INT NOT NULL,                                 			-- 物件型態編號 (FK)
+    RCDID INT NOT NULL,                                 			-- 行政區編號 (FK)
+    PARAddress NVARCHAR(255) NOT NULL,                  	-- 門牌地址
+    PARPrice DECIMAL(15,2) NOT NULL,                   	 	-- 總價
+    PARIncludeParking BIT NOT NULL DEFAULT 0,           	-- 是否含車位費 (0:false, 1:true)
+    PARUnitPrice DECIMAL(7,2) NULL,                     		-- 單價
+
+    /*系統欄位*/
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
+
+    /*CHECK 設定*/
+    CONSTRAINT CK_PropertyAssetRecord_Price CHECK (PARPrice >= 0),
+    CONSTRAINT CK_PropertyAssetRecord_UnitPrice CHECK (PARUnitPrice IS NULL OR PARUnitPrice >= 0),
+    CONSTRAINT CK_PropertyAssetRecord_Date CHECK (PAREndDate >= PARStartDate),
+
+    /*FK 設定*/
+    CONSTRAINT FK_PropertyAssetRecord_PropertyAsset FOREIGN KEY (PAID) REFERENCES PropertyAsset(PAID),
+    CONSTRAINT FK_PropertyAssetRecord_PropertyAssetType FOREIGN KEY (PATID) REFERENCES PropertyAssetType(PATID),
+    CONSTRAINT FK_PropertyAssetRecord_RegionCityDistrict FOREIGN KEY (RCDID) REFERENCES RegionCityDistrict(RCDID),
+    CONSTRAINT FK_PropertyAssetRecord_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID)
+);
+GO
+
+-- 表格描述
+EXEC sp_addextendedproperty N'MS_Description', N'物件合約異動紀錄表', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord';
+
+-- 欄位描述
+EXEC sp_addextendedproperty N'MS_Description', N'物件合約異動紀錄編號', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARID';
+EXEC sp_addextendedproperty N'MS_Description', N'物件編號', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PAID';
+EXEC sp_addextendedproperty N'MS_Description', N'合約起始日', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARStartDate';
+EXEC sp_addextendedproperty N'MS_Description', N'合約結束日', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PAREndDate';
+EXEC sp_addextendedproperty N'MS_Description', N'物件型態編號', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PATID';
+EXEC sp_addextendedproperty N'MS_Description', N'行政區編號', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'RCDID';
+EXEC sp_addextendedproperty N'MS_Description', N'門牌地址', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARAddress';
+EXEC sp_addextendedproperty N'MS_Description', N'總價', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARPrice';
+EXEC sp_addextendedproperty N'MS_Description', N'是否含車位費', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARIncludeParking';
+EXEC sp_addextendedproperty N'MS_Description', N'單價', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'PARUnitPrice';
+EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'Sys_CreatedDT';
+EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'PropertyAssetRecord', N'Column', N'Sys_CreatedBy';
+GO
+
 
 
 
@@ -604,9 +655,9 @@ CREATE TABLE PropertyAssetLand (
     ZTID INT NULL,                          				-- 土地使用分區編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,               						-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,               					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,               					-- 修改時間
     Sys_UpdateBy INT NULL,                    						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -662,9 +713,9 @@ CREATE TABLE LandUseDetail (
     PALID INT NOT NULL,                     			-- 物件土地資料編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,               						-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,               					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,               					-- 修改時間
     Sys_UpdateBy INT NULL,                    						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -724,9 +775,9 @@ CREATE TABLE PropertyAssetBuilding (
     CIID INT NULL,                               			-- 社區編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                      					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                      					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                      					-- 修改時間
     Sys_UpdateBy INT NULL,                           					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -773,9 +824,9 @@ CREATE TABLE PropertyAssetBuildingArea (
     PABAFloorArea DECIMAL(15,2) NOT NULL,           	-- 建坪
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -836,9 +887,9 @@ CREATE TABLE CarParkDetail (
     CPDNote NVARCHAR(100) NULL,                 	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                      					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                      					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                      					-- 修改時間
     Sys_UpdateBy INT NULL,                           					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -885,9 +936,9 @@ CREATE TABLE PropertyAssetKey (
     PAKIsActive BIT NOT NULL DEFAULT 1,         	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                      					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                      					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                      					-- 修改時間
     Sys_UpdateBy INT NULL,                           					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -927,9 +978,9 @@ CREATE TABLE PropertyAssetExecutive (
     PAEIsActive BIT NOT NULL DEFAULT 1,       	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -941,7 +992,7 @@ CREATE TABLE PropertyAssetExecutive (
 
     /*CHECK 設定*/
     CONSTRAINT CHK_PAE_PAEPercent CHECK (PAEPercent >= 0),
-    CONSTRAINT CHK_PropertyAssetKey_IsActive CHECK (PAKIsActive IN (0,1))
+    CONSTRAINT CHK_PropertyAssetExecutive_IsActive CHECK (PAEIsActive IN (0,1))
 );
 GO
 -- 表格描述
@@ -996,12 +1047,12 @@ CREATE TABLE CustomerProfileMain (
     CPMMayMarket BIT NOT NULL DEFAULT 1,     	-- 可否行銷 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                         				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                         				-- 刪除時間
     Sys_DeleteBy INT NULL,                              					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -1046,9 +1097,9 @@ CREATE TABLE CustomerProfilePhone (
     CPPPhone VARCHAR(30) NOT NULL,           	-- 連絡電話
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -1080,9 +1131,9 @@ CREATE TABLE PropertyAssetCustomer (
     PACNote NVARCHAR(100) NULL,              	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -1124,12 +1175,12 @@ CREATE TABLE AssetChanegeLog (
     ACLNote NVARCHAR(500) NULL,           			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,               				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                        				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                        				-- 刪除時間
     Sys_DeleteBy INT NULL,                            	 					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -1177,19 +1228,19 @@ CREATE TABLE AssetPurchaseOffer (
     APOOfferPrice DECIMAL(12,2) NOT NULL, 	-- 下斡金額
     APOOfferType INT NOT NULL,                    	-- 斡金類型 (FK)
     APOAmount DECIMAL(12,2) NOT NULL,		-- 斡旋金
-    APODeposit DATETIME NULL,               		-- 存入時間
-    APORefundDT DATETIME NULL,                    	-- 退還時間
+    APODeposit DATETIME2 NULL,               		-- 存入時間
+    APORefundDT DATETIME2 NULL,                    	-- 退還時間
     APORefundReason NVARCHAR(50) NULL,  	-- 退還原因
     APORefundType INT NULL,            			-- 退還方式 (FK)
     APONote NVARCHAR(500) NULL,  			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                 				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -1244,9 +1295,9 @@ CREATE TABLE BannerSizeType (
     BSTIsActive BIT NOT NULL DEFAULT 1,                	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間 YYYY/MM/DD hh:mm:ss
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間 YYYY/MM/DD hh:mm:ss
     Sys_UpdateBy INT NULL                                 					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -1308,9 +1359,9 @@ CREATE TABLE BannerPurchaseLog (
     BPLDiscount INT NOT NULL DEFAULT 0, 	-- 折扣
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間 YYYY/MM/DD hh:mm:ss
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間 YYYY/MM/DD hh:mm:ss
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間 YYYY/MM/DD hh:mm:ss
     Sys_UpdateBy INT NULL                                 					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -1376,9 +1427,9 @@ CREATE TABLE BannerMainList (
     BISID INT NOT NULL,                				-- 帆布狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                                 					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -1442,11 +1493,11 @@ CREATE TABLE BannerRequest (
     BRNote_admin NVARCHAR(500) NULL,            	-- 行政備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,             					-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,             					-- 審核時間
     Sys_ApprovedBy INT NULL                  						-- 審核人員 (FK)
 
     /*FK 設定*/
@@ -1499,9 +1550,9 @@ CREATE TABLE BannerMountDetail (
     BISID INT NOT NULL,                      				-- 帆布狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL                                					-- 修改人員 (FK)
 
     /*FK 設定*/

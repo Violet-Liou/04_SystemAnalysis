@@ -11,9 +11,9 @@ CREATE TABLE WorkTimePolicy (
     WTPNote NVARCHAR(100) NULL,                   	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -65,15 +65,15 @@ CREATE TABLE SpecialWorkTime (
     SWTID INT IDENTITY(1,1) PRIMARY KEY,            	-- 特殊工時設定編號
     COID INT NOT NULL,                              			-- 公司編號 (FK)
     SWTDate DATE NOT NULL,                           		-- 特殊日期
-    SWTStart DATETIME NOT NULL,                     		-- 上班時間
-    SWTEnd DATETIME NOT NULL,                       		-- 下班時間
+    SWTStart DATETIME2 NOT NULL,                     		-- 上班時間
+    SWTEnd DATETIME2 NOT NULL,                       		-- 下班時間
     SWTRID INT NOT NULL,                            		-- 特殊工時調整原因編號 (FK)
     SWTIsOverride BIT NOT NULL DEFAULT 1,           	-- 是否覆蓋常規設定 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                       					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                       				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                       				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -131,15 +131,15 @@ CREATE TABLE AttendanceRecord (
     ARID INT IDENTITY(1,1) PRIMARY KEY,		-- 出勤紀錄編號
     EEID INT NOT NULL,						-- 員工編號 (FK)
     ARDate DATE NOT NULL,					-- 出勤日期
-    ARCheckIn DATETIME NOT NULL,			-- 上班時間
-    ARCheckOut DATETIME NULL,				-- 下班時間
+    ARCheckIn DATETIME2 NOT NULL,			-- 上班時間
+    ARCheckOut DATETIME2 NULL,				-- 下班時間
     ASID INT NOT NULL, 					-- 出勤狀態編號 (FK)
     ARNote NVARCHAR(100) NULL,                   	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                     					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                     					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                     					-- 修改時間
     Sys_UpdateBy INT NULL,                          						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -172,14 +172,14 @@ CREATE TABLE ShiftSchedule (
     SSID INT IDENTITY(1,1) PRIMARY KEY, 		-- 班表設定編號
     EEID INT NOT NULL,						-- 員工編號 (FK)
     SSDate DATE NOT NULL,					-- 排班日期
-    SSStart DATETIME NOT NULL, 				-- 開始時間
-    SSEnd DATETIME NOT NULL,				-- 結束時間
+    SSStart DATETIME2 NOT NULL, 				-- 開始時間
+    SSEnd DATETIME2 NOT NULL,				-- 結束時間
     SSNote NVARCHAR(100) NULL,			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                     					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                     					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                     					-- 修改時間
     Sys_UpdateBy INT NULL,                          						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -215,9 +215,9 @@ CREATE TABLE LeaveType (
     LTIsActive BIT NOT NULL DEFAULT 1,			-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -250,17 +250,17 @@ CREATE TABLE LeaveRequest (
     LRID INT IDENTITY(1,1) PRIMARY KEY,		-- 請假申請編號
     EEID INT NOT NULL,                            		-- 員工編號 (FK)
     LTID INT NOT NULL,                            		-- 請假類別編號 (FK)
-    LRStartDT DATETIME NOT NULL,                  	-- 開始時間
-    LREndDT DATETIME NOT NULL,                    	-- 結束時間
+    LRStartDT DATETIME2 NOT NULL,                  	-- 開始時間
+    LREndDT DATETIME2 NOT NULL,                    	-- 結束時間
     LRReason NVARCHAR(50) NULL,                  	-- 請假原因
     APSID INT NOT NULL,                           		-- 申請狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                       				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                       				-- 審核時間
     Sys_ApprovedBy INT NULL,                             					-- 審核人員 (FK)
 
     /*FK 設定*/
@@ -297,17 +297,17 @@ CREATE TABLE OvertimeRequest (
     ORID INT IDENTITY(1,1) PRIMARY KEY,          	-- 加班申請編號
     EEID INT NOT NULL,                            		-- 員工編號 (FK)
     ORDate DATE NOT NULL,                          	-- 加班日期
-    ORStart DATETIME NOT NULL,                    	-- 開始時間
-    OREnd DATETIME NOT NULL,                      	-- 結束時間
+    ORStart DATETIME2 NOT NULL,                    	-- 開始時間
+    OREnd DATETIME2 NOT NULL,                      	-- 結束時間
     ORReason NVARCHAR(50) NULL,                  	-- 加班原因
     APSID INT NOT NULL,                          		 -- 申請狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                       				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                       				-- 審核時間
     Sys_ApprovedBy INT NULL,                             					-- 審核人員 (FK)
 
     /*FK 設定*/
@@ -366,9 +366,9 @@ CREATE TABLE ATExceptionLog (
     AELNote NVARCHAR(100) NOT NULL,      	-- 說明
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -404,9 +404,9 @@ CREATE TABLE ATMonthlySummary (
     AMSOvertime INT NOT NULL DEFAULT 0,	-- 加班時數
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/

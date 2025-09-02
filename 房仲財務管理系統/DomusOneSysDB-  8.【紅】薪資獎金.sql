@@ -30,13 +30,13 @@ CREATE TABLE MonthlySettlement (
     MSSID INT NOT NULL,                          		-- 月度結算狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                            				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                             				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                             				-- 修改時間
     Sys_UpdateBy INT NULL,                                  					-- 修改人員 (FK)
-    Sys_PreliminaryDT DATETIME NOT NULL,                   			-- 試算時間
+    Sys_PreliminaryDT DATETIME2 NOT NULL,                   			-- 試算時間
     Sys_PreliminaryBy INT NOT NULL,                        				-- 試算人員 (FK)
-    Sys_FinalizedDT DATETIME NULL,                          				-- 結算時間
+    Sys_FinalizedDT DATETIME2 NULL,                          				-- 結算時間
     Sys_FinalizedBy INT NULL,                                				-- 結算人員 (FK)
 
     /*CHECK 設定*/
@@ -70,9 +70,11 @@ EXEC sp_addextendedproperty N'MS_Description', N'結算人員', N'Schema', N'dbo
 GO
 
 
+--=========================以上需要先在【(6.【湖綠】費用)之前先運行】============================================================================================
 
-/*【118. 獎金拆算主檔 BonusAllocaationMain】*/
-CREATE TABLE BonusAllocaationMain (
+
+/*【118. 獎金拆算主檔 BonusAllocationMain】*/
+CREATE TABLE BonusAllocationMain (
     BAMID INT IDENTITY(1,1) PRIMARY KEY,                   			-- 獎金拆算主檔編號
     CPAID INT NOT NULL,                                    					-- 業績分配編號 (FK)
     BAMPerf_Total DECIMAL(15,2) NOT NULL DEFAULT 0,        	-- 本次拆算總業績(元)
@@ -81,47 +83,47 @@ CREATE TABLE BonusAllocaationMain (
     MSID INT NOT NULL,                                     					-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),     		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),     		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                            					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                            					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                            					-- 修改時間
     Sys_UpdateBy INT NULL,                                 						-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                   				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                            					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                            					-- 刪除時間
     Sys_DeleteBy INT NULL,                                 						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
-    CONSTRAINT CHK_BonusAllocaationMain_BAMPerf_Total CHECK (BAMPerf_Total >= 0),
-    CONSTRAINT CHK_BonusAllocaationMain_BAMBonus CHECK (BAMBonus >= 0),
+    CONSTRAINT CHK_BonusAllocationMain_BAMPerf_Total CHECK (BAMPerf_Total >= 0),
+    CONSTRAINT CHK_BonusAllocationMain_BAMBonus CHECK (BAMBonus >= 0),
 
     /*FK 設定*/
-    CONSTRAINT FK_BonusAllocaationMain_CommissionPerfAllocation FOREIGN KEY (CPAID) REFERENCES CommissionPerfAllocation(CPAID),
-    CONSTRAINT FK_BonusAllocaationMain_MonthlySettlement FOREIGN KEY (MSID) REFERENCES MonthlySettlement(MSID),
-    CONSTRAINT FK_BonusAllocaationMain_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_BonusAllocaationMain_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_BonusAllocaationMain_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_BonusAllocationMain_CommissionPerfAllocation FOREIGN KEY (CPAID) REFERENCES CommissionPerfAllocation(CPAID),
+    CONSTRAINT FK_BonusAllocationMain_MonthlySettlement FOREIGN KEY (MSID) REFERENCES MonthlySettlement(MSID),
+    CONSTRAINT FK_BonusAllocationMain_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BonusAllocationMain_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BonusAllocationMain_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID)
 );
 GO
 -- 表格描述
-EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔', N'Schema', N'dbo', N'Table', N'BonusAllocationMain';
 -- 欄位描述
-EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔編號', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'BAMID';
-EXEC sp_addextendedproperty N'MS_Description', N'業績分配編號', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'CPAID';
-EXEC sp_addextendedproperty N'MS_Description', N'本次拆算總業績(元)', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'BAMPerf_Total';
-EXEC sp_addextendedproperty N'MS_Description', N'本次拆算獎金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'BAMBonus';
-EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'BAMNote';
-EXEC sp_addextendedproperty N'MS_Description', N'結算年月', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'MSID';
-EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_CreatedDT';
-EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_CreatedBy';
-EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_UpdateDT';
-EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_UpdateBy';
-EXEC sp_addextendedproperty N'MS_Description', N'是否刪除', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_IsDelete';
-EXEC sp_addextendedproperty N'MS_Description', N'刪除時間', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_DeleteDT';
-EXEC sp_addextendedproperty N'MS_Description', N'刪除人員', N'Schema', N'dbo', N'Table', N'BonusAllocaationMain', N'Column', N'Sys_DeleteBy';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔編號', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'BAMID';
+EXEC sp_addextendedproperty N'MS_Description', N'業績分配編號', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'CPAID';
+EXEC sp_addextendedproperty N'MS_Description', N'本次拆算總業績(元)', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'BAMPerf_Total';
+EXEC sp_addextendedproperty N'MS_Description', N'本次拆算獎金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'BAMBonus';
+EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'BAMNote';
+EXEC sp_addextendedproperty N'MS_Description', N'結算年月', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'MSID';
+EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_CreatedDT';
+EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_CreatedBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_UpdateDT';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_UpdateBy';
+EXEC sp_addextendedproperty N'MS_Description', N'是否刪除', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_IsDelete';
+EXEC sp_addextendedproperty N'MS_Description', N'刪除時間', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_DeleteDT';
+EXEC sp_addextendedproperty N'MS_Description', N'刪除人員', N'Schema', N'dbo', N'Table', N'BonusAllocationMain', N'Column', N'Sys_DeleteBy';
 GO
 
 
-/*【119. 獎金拆算明細 BonusAllocaationDetail】*/
-CREATE TABLE BonusAllocaationDetail (
+/*【119. 獎金拆算明細 BonusAllocationDetail】*/
+CREATE TABLE BonusAllocationDetail (
     BADID INT IDENTITY(1,1) PRIMARY KEY,                  			-- 獎金拆算明細編號
     BAMID INT NOT NULL,                                   					-- 獎金拆算主檔編號 (FK)
     BSAID INT NOT NULL,                                   					-- 人員規章套用編號 (FK)
@@ -131,38 +133,38 @@ CREATE TABLE BonusAllocaationDetail (
     BADBonus DECIMAL(15,2) NOT NULL DEFAULT 0,            		-- 業績獎金(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),    		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),    		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                           						-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                           					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                           					-- 修改時間
     Sys_UpdateBy INT NULL,                                						-- 修改人員 (FK)
 
     /*CHECK 設定*/
-    CONSTRAINT CHK_BonusAllocaationDetail_BADPerformance CHECK (BADPerformance >= 0),
-    CONSTRAINT CHK_BonusAllocaationDetail_BADTax CHECK (BADTax >= 0),
-    CONSTRAINT CHK_BonusAllocaationDetail_BADPercentage CHECK (BADPercentage >= 0 AND BADPercentage <= 100),
-    CONSTRAINT CHK_BonusAllocaationDetail_BADBonus CHECK (BADBonus >= 0),
+    CONSTRAINT CHK_BonusAllocationDetail_BADPerformance CHECK (BADPerformance >= 0),
+    CONSTRAINT CHK_BonusAllocationDetail_BADTax CHECK (BADTax >= 0),
+    CONSTRAINT CHK_BonusAllocationDetail_BADPercentage CHECK (BADPercentage >= 0 AND BADPercentage <= 100),
+    CONSTRAINT CHK_BonusAllocationDetail_BADBonus CHECK (BADBonus >= 0),
 
     /*FK 設定*/
-    CONSTRAINT FK_BonusAllocaationDetail_BonusAllocaationMain FOREIGN KEY (BAMID) REFERENCES BonusAllocaationMain(BAMID),
-    CONSTRAINT FK_BonusAllocaationDetail_BonusStructureAssignment FOREIGN KEY (BSAID) REFERENCES BonusStructureAssignment(BSAID),
-    CONSTRAINT FK_BonusAllocaationDetail_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
-    CONSTRAINT FK_BonusAllocaationDetail_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
+    CONSTRAINT FK_BonusAllocationDetail_BonusAllocationMain FOREIGN KEY (BAMID) REFERENCES BonusAllocationMain(BAMID),
+    CONSTRAINT FK_BonusAllocationDetail_BonusStructureAssignment FOREIGN KEY (BSAID) REFERENCES BonusStructureAssignment(BSAID),
+    CONSTRAINT FK_BonusAllocationDetail_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
+    CONSTRAINT FK_BonusAllocationDetail_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
 );
 GO
 -- 表格描述
-EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算明細', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算明細', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail';
 -- 欄位描述
-EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算明細編號', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BADID';
-EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔編號', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BAMID';
-EXEC sp_addextendedproperty N'MS_Description', N'規章套用', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BSAID';
-EXEC sp_addextendedproperty N'MS_Description', N'業績(元)', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BADPerformance';
-EXEC sp_addextendedproperty N'MS_Description', N'稅金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BADTax';
-EXEC sp_addextendedproperty N'MS_Description', N'獎金比例(%)', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BADPercentage';
-EXEC sp_addextendedproperty N'MS_Description', N'業績獎金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'BADBonus';
-EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'Sys_CreatedDT';
-EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'Sys_CreatedBy';
-EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'Sys_UpdateDT';
-EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusAllocaationDetail', N'Column', N'Sys_UpdateBy';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算明細編號', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BADID';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金拆算主檔編號', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BAMID';
+EXEC sp_addextendedproperty N'MS_Description', N'規章套用', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BSAID';
+EXEC sp_addextendedproperty N'MS_Description', N'業績(元)', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BADPerformance';
+EXEC sp_addextendedproperty N'MS_Description', N'稅金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BADTax';
+EXEC sp_addextendedproperty N'MS_Description', N'獎金比例(%)', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BADPercentage';
+EXEC sp_addextendedproperty N'MS_Description', N'業績獎金(元)', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'BADBonus';
+EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'Sys_CreatedDT';
+EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'Sys_CreatedBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'Sys_UpdateDT';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusAllocationDetail', N'Column', N'Sys_UpdateBy';
 GO
 
 
@@ -176,9 +178,9 @@ CREATE TABLE EmployeeBonusSummary (
     EBSPercentage DECIMAL(5,2) NOT NULL DEFAULT 0,    	-- 獎金比例(%)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             						-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -219,12 +221,12 @@ CREATE TABLE EmployeeBonusDetail (
     EBDPerf_E DECIMAL(15,2) NOT NULL DEFAULT 0,    		-- 累積後業績(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        						-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        					-- 修改時間
     Sys_UpdateBy INT NULL,                             							-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,               					-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                        						-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                        						-- 刪除時間
     Sys_DeleteBy INT NULL,                             							-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -232,7 +234,7 @@ CREATE TABLE EmployeeBonusDetail (
 
     /*FK 設定*/
     CONSTRAINT FK_EBD_EBS FOREIGN KEY (EBSID) REFERENCES EmployeeBonusSummary(EBSID),
-    CONSTRAINT FK_EBD_BAM FOREIGN KEY (BAMID) REFERENCES BonusAllocaationMain(BAMID),
+    CONSTRAINT FK_EBD_BAM FOREIGN KEY (BAMID) REFERENCES BonusAllocationMain(BAMID),
     CONSTRAINT FK_EBD_CreatedBy FOREIGN KEY (Sys_CreatedBy) REFERENCES Employee(EEID),
     CONSTRAINT FK_EBD_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID),
     CONSTRAINT FK_EBD_DeletedBy FOREIGN KEY (Sys_DeleteBy) REFERENCES Employee(EEID)
@@ -272,12 +274,12 @@ CREATE TABLE IncentiveBonusRecords (
     MSID INT NOT NULL,                                 					-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             						-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,               				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                        					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                        					-- 刪除時間
     Sys_DeleteBy INT NULL,                             						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -287,7 +289,7 @@ CREATE TABLE IncentiveBonusRecords (
     CONSTRAINT CK_IncentiveBonusRecords_Bonus CHECK (IBRBonus >= 0),
 
     /*FK 設定*/
-    CONSTRAINT FK_IncentiveBonusRecords_BAMID FOREIGN KEY (BAMID) REFERENCES BonusAllocaationMain(BAMID),
+    CONSTRAINT FK_IncentiveBonusRecords_BAMID FOREIGN KEY (BAMID) REFERENCES BonusAllocationMain(BAMID),
     CONSTRAINT FK_IncentiveBonusRecords_BSAID FOREIGN KEY (BSAID) REFERENCES BonusStructureAssignment(BSAID),
     CONSTRAINT FK_IncentiveBonusRecords_EEID FOREIGN KEY (EEID) REFERENCES Employee(EEID),
     CONSTRAINT FK_IncentiveBonusRecords_MSID FOREIGN KEY (MSID) REFERENCES MonthlySettlement(MSID),
@@ -334,12 +336,12 @@ CREATE TABLE SupervisorPerformance (
     MSID INT NOT NULL,                                      				-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),      	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),      	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                             					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                             					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                             					-- 修改時間
     Sys_UpdateBy INT NULL,                                  						-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                    				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                             					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                             					-- 刪除時間
     Sys_DeleteBy INT NULL,                                  						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -351,7 +353,7 @@ CREATE TABLE SupervisorPerformance (
 
 
     /*FK 設定*/
-    CONSTRAINT FK_SupervisorPerformance_BAM FOREIGN KEY (BAMID) REFERENCES BonusAllocaationMain(BAMID),
+    CONSTRAINT FK_SupervisorPerformance_BAM FOREIGN KEY (BAMID) REFERENCES BonusAllocationMain(BAMID),
     CONSTRAINT FK_SupervisorPerformance_BSA FOREIGN KEY (BSAID) REFERENCES BonusStructureAssignment(BSAID),
     CONSTRAINT FK_SupervisorPerformance_EE FOREIGN KEY (EEID) REFERENCES Employee(EEID),
     CONSTRAINT FK_SupervisorPerformance_MS FOREIGN KEY (MSID) REFERENCES MonthlySettlement(MSID),
@@ -398,12 +400,12 @@ CREATE TABLE ExecutivePerformance (
     MSID INT NOT NULL,                         						-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                         					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                         					-- 刪除時間
     Sys_DeleteBy INT NULL,                              						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -459,12 +461,12 @@ CREATE TABLE SuspendedDeals (
     SDNote NVARCHAR(500) NULL,                           	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                 				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -514,12 +516,12 @@ CREATE TABLE AssistantPerformance (
     SDID INT NULL,                                        					-- 成交案件暫止編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),    	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),    	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                           					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                           				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                           				-- 修改時間
     Sys_UpdateBy INT NULL,                                					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                  				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                           				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                           				-- 刪除時間
     Sys_DeleteBy INT NULL,                                					-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -599,12 +601,12 @@ CREATE TABLE BonusRefundCalculation (
     MSID INT NOT NULL,                             						-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                       					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                       					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                       					-- 修改時間
     Sys_UpdateBy INT NULL,                            						-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,              				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                       					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                       					-- 刪除時間
     Sys_DeleteBy INT NULL,                            						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -657,9 +659,9 @@ CREATE TABLE BonusRefundDetail (
     BRDBonus DECIMAL(15,2) NOT NULL DEFAULT 0,      			-- 獎金(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             						-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -709,12 +711,12 @@ CREATE TABLE SupervisorPerformanceRefund (
     MSID INT NOT NULL,                                     					-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),     	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),     	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                            				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                            				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                            				-- 修改時間
     Sys_UpdateBy INT NULL,                                 					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                   			-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                            				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                            				-- 刪除時間
     Sys_DeleteBy INT NULL,                                 					-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -776,12 +778,12 @@ CREATE TABLE ExecutivePerformanceRefund (
     MSID INT NOT NULL,                                   					-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                 				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -859,12 +861,12 @@ CREATE TABLE PaySlips (
     PSSID INT NOT NULL,                                					-- 薪資發放狀態編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             						-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,               				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                        					-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                        					-- 刪除時間
     Sys_DeleteBy INT NULL,                             						-- 刪除人員 (FK)
 
     /*CHECK 設定*/
@@ -913,9 +915,9 @@ CREATE TABLE PaySlipEarnings (
     PSENote NVARCHAR(250) NULL,                          			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -954,9 +956,9 @@ CREATE TABLE PaySlipDeductions (
     PSDNote NVARCHAR(250) NULL,                      				-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -1016,9 +1018,9 @@ CREATE TABLE EmployeeBenefitMain (
     EBMIsActive BIT NOT NULL DEFAULT 1,         	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -1060,9 +1062,9 @@ CREATE TABLE EmployeeBenefitRecoed (
     EBRContribution_Total DECIMAL(7,0) NOT NULL DEFAULT 0, 	-- 總負擔金額(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -1103,9 +1105,9 @@ CREATE TABLE TaxBracketMain (
     TBMIsActive BIT NOT NULL DEFAULT 1,           	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間 (YYYY/MM/DD hh:mm:ss)
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間 (YYYY/MM/DD hh:mm:ss)
     Sys_CreatedBy INT NOT NULL,                   							-- 新增人員 (FK) ref. Employee.EEID
-    Sys_UpdateDT DATETIME NULL,                   						-- 修改時間 (YYYY/MM/DD hh:mm:ss)
+    Sys_UpdateDT DATETIME2 NULL,                   						-- 修改時間 (YYYY/MM/DD hh:mm:ss)
     Sys_UpdateBy INT NULL,                        							-- 修改人員 (FK) ref. Employee.EEID
 
     /*CHECK 設定*/
@@ -1141,9 +1143,9 @@ CREATE TABLE TaxBracketDetail (
     TBDRate DECIMAL(5,2) NOT NULL DEFAULT 0,          	-- 稅率(%)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*CHECK 設定*/

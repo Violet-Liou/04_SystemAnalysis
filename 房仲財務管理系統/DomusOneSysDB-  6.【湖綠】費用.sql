@@ -9,13 +9,13 @@ CREATE TABLE BannerExpense (
     BENote NVARCHAR(100) NULL,                          	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
-    Sys_SubmitDT DATETIME NOT NULL,                      			-- 提交時間
+    Sys_SubmitDT DATETIME2 NOT NULL,                      			-- 提交時間
     Sys_SubmitBy INT NOT NULL,                           				-- 提交人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                        				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                        				-- 審核時間
     Sys_ApprovedBy INT NULL                              	 				-- 審核人員 (FK)
 
     /*CHECK 設定*/
@@ -79,9 +79,9 @@ CREATE TABLE BannerExpenseDetail (
     BEDNote NVARCHAR(100) NULL,                       	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -121,9 +121,9 @@ CREATE TABLE BannerExpenseBreakdown (
     MSID INT NULL,                                     			-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -169,9 +169,9 @@ CREATE TABLE BannerExpenseRefund (
     MSID INT NULL,                                     			-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -215,9 +215,9 @@ CREATE TABLE UniformDeposit (
     UDNote NVARCHAR(100) NULL,                	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -264,9 +264,9 @@ CREATE TABLE UniformInventory (
     MSID INT NOT NULL,                         		-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -311,9 +311,9 @@ CREATE TABLE ContractDeduction (
     MSID INT NOT NULL,                         			-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -367,16 +367,16 @@ CREATE TABLE ExpenseMaster (
     MSID INT NOT NULL,                                  				-- 月度結算編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                         				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                         				-- 刪除時間
     Sys_DeleteBy INT NULL,                              					-- 刪除人員 (FK)
-    Sys_SubmitDT DATETIME NULL,                         				-- 提交時間
+    Sys_SubmitDT DATETIME2 NULL,                         				-- 提交時間
     Sys_SubmitBy INT NULL,                              					-- 提交人員 (FK)
-    Sys_ApprovalDT DATETIME NULL,                       				-- 審核時間
+    Sys_ApprovalDT DATETIME2 NULL,                       				-- 審核時間
     Sys_ApprovedBy INT NULL,                            					-- 審核人員 (FK)
 
     /*CHECK 設定*/
@@ -437,9 +437,9 @@ CREATE TABLE ExpenseDetail (
     EDAmount DECIMAL(8,2) NOT NULL DEFAULT 0, 	-- 金額
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                        					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                        				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                        				-- 修改時間
     Sys_UpdateBy INT NULL,                             					-- 修改人員 (FK)
 
     /*CHECK 設定*/

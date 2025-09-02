@@ -56,13 +56,13 @@ CREATE TABLE BonusStructure (
     BSIsActive BIT NOT NULL DEFAULT 1,           	-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                  					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                  					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                  					-- 修改時間
     Sys_UpdateBy INT NULL,                       						-- 修改人員 (FK)
 
     /*CHECK 設定*/
-    ,CONSTRAINT CK_BonusStructure_BSIsActive CHECK (BSIsActive IN (0,1))
+    CONSTRAINT CK_BonusStructure_BSIsActive CHECK (BSIsActive IN (0,1))
     ,CONSTRAINT CK_BonusStructure_BSPriority CHECK (BSPriority IN ('0','1','2','3','4','5','6','7','8','9'))
 
     /*FK 設定*/
@@ -103,13 +103,13 @@ CREATE TABLE BonusStructureDetails (
     BSDFixedAmount DECIMAL(15,2) NULL,      	-- 固定獎金(元)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                  					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                  					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                  					-- 修改時間
     Sys_UpdateBy INT NULL,                       						-- 修改人員 (FK)
 
     /*CHECK 設定*/
-    ,CONSTRAINT CK_BonusStructureDetails_Range CHECK (BSDRange_S >= 0 AND (BSDRange_E IS NULL OR BSDRange_E >= BSDRange_S))
+    CONSTRAINT CK_BonusStructureDetails_Range CHECK (BSDRange_S >= 0 AND (BSDRange_E IS NULL OR BSDRange_E >= BSDRange_S))
     ,CONSTRAINT CK_BonusStructureDetails_Percentage CHECK (BSDPercentage IS NULL OR (BSDPercentage >= 0 AND BSDPercentage <= 100))
     ,CONSTRAINT CK_BonusStructureDetails_FixedAmount CHECK (BSDFixedAmount IS NULL OR BSDFixedAmount >= 0)
 
@@ -131,7 +131,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'固定獎金(元)', N'Schema', 
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_UpdateDT';
-EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_UpdateBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureDetails', N'Column', N'Sys_UpdateBy'
 GO
 
 
@@ -146,9 +146,9 @@ CREATE TABLE BonusStructureAssignment (
     BSANote NVARCHAR(100) NULL,                  	-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         	 				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
 
     /*CHECK 設定*/
@@ -162,10 +162,8 @@ CREATE TABLE BonusStructureAssignment (
     CONSTRAINT FK_BSA_UpdatedBy FOREIGN KEY (Sys_UpdateBy) REFERENCES Employee(EEID)
 );
 GO
-
 -- 表格描述
 EXEC sp_addextendedproperty N'MS_Description', N'人員規章套用表', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment';
-
 -- 欄位描述
 EXEC sp_addextendedproperty N'MS_Description', N'人員規章套用編號', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'BSAID';
 EXEC sp_addextendedproperty N'MS_Description', N'人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'EEID';
@@ -177,6 +175,6 @@ EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'T
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_UpdateDT';
-EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_UpdateBy';
+EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'BonusStructureAssignment', N'Column', N'Sys_UpdateBy'
 GO
 

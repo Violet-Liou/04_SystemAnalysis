@@ -22,11 +22,12 @@ CREATE TABLE Employee (
     EEMailAddr NVARCHAR(255) NOT NULL,	--通訊地址
     EEIsActive BIT NOT NULL DEFAULT 1,		--狀態
     EENote NVARCHAR(500) NULL,			--備註
+    EEPath NVARCHAR(500) NULL,			--員工照片路徑
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NULL,   								--新增人員 (先允許 NULL，避免 FK 錯誤)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL									--修改人員 (FK)
 );
 GO
@@ -44,6 +45,7 @@ EXEC sp_addextendedproperty N'MS_Description', N'戶籍地址', N'Schema', N'dbo
 EXEC sp_addextendedproperty N'MS_Description', N'通訊地址', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEMailAddr';
 EXEC sp_addextendedproperty N'MS_Description', N'狀態', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEIsActive';
 EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EENote';
+EXEC sp_addextendedproperty N'MS_Description', N'照片', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEPath';
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_UpdateDT';
@@ -94,12 +96,12 @@ CREATE TABLE EmployeeTel (
     EETNO VARCHAR(30) NOT NULL,             	-- 連絡電話
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -137,12 +139,12 @@ CREATE TABLE EmergencyContact (
     EECNote NVARCHAR(500) NULL,		-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
 
@@ -181,12 +183,12 @@ CREATE TABLE EmergencyContactTel (
     ECTPhone VARCHAR(30) NOT NULL,		-- 連絡電話
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -229,12 +231,12 @@ CREATE TABLE Company (
     COEstDate DATE NOT NULL, 					-- 成立日期
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -298,12 +300,12 @@ CREATE TABLE CompanyProfile (
     CPDetails NVARCHAR(100) NOT NULL,            -- 明細
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -339,12 +341,12 @@ CREATE TABLE Departments (
     DPTName NVARCHAR(50) NOT NULL, 		-- 部門名稱
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -379,12 +381,12 @@ CREATE TABLE DepartmentGroups (
     DGName NVARCHAR(50) NOT NULL,       	-- 部門組別名稱
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -418,12 +420,12 @@ CREATE TABLE JobTitles (
     JTName NVARCHAR(50) NOT NULL,		-- 職稱名稱
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,						--是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,							--刪除時間
+    Sys_DeleteDT DATETIME2 NULL,							--刪除時間
     Sys_DeleteBy INT NULL,									--刪除人員 (FK)
 
     /*FK 設定*/
@@ -457,9 +459,9 @@ GO
 CREATE TABLE EmployeeIDCard (
     EICID VARCHAR(16) PRIMARY KEY,              				-- 卡片號碼 (PK, unique)
     EEID INT NOT NULL,                          					-- 員工編號 (FK)
-    EICRegDT DATETIME NOT NULL DEFAULT GETDATE(),		-- 登錄日期
+    EICRegDT DATETIME2 NOT NULL DEFAULT GETDATE(),		-- 登錄日期
     COID INT NOT NULL,                          					-- 公司編號 (FK 打卡地點)
-    EICExpiryDT DATETIME NULL,                  				-- 失效日期
+    EICExpiryDT DATETIME2 NULL,                  				-- 失效日期
 
     /*系統欄位*/
     Sys_CreatedBy INT NOT NULL, 		-- 新增人員 (FK)
@@ -523,9 +525,9 @@ CREATE TABLE JobAssignments (
     JANote NVARCHAR(500) NULL,			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		--新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
     Sys_CreatedBy INT NOT NULL,								--新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,							--修改時間
+    Sys_UpdateDT DATETIME2 NULL,							--修改時間
     Sys_UpdateBy INT NULL,									--修改人員 (FK)
 
     /*FK 設定*/
@@ -566,9 +568,9 @@ CREATE TABLE SalaryStructureType (
     SSTName NVARCHAR(20) NOT NULL,              	-- 薪資結構類別名稱
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                   					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                 				  	-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                 				  	-- 修改時間
     Sys_UpdateBy INT NULL,                     					   	-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -596,9 +598,9 @@ CREATE TABLE SalaryStructureDetail (
     SSDName NVARCHAR(30) NOT NULL, 	-- 薪資結構明細名稱
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                   					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,               				    	-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,               				    	-- 修改時間
     Sys_UpdateBy INT NULL,                        						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -632,12 +634,12 @@ CREATE TABLE CompanySalaryStructure (
     CSSNote NVARCHAR(100) NULL,					-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                 				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -685,9 +687,9 @@ CREATE TABLE EmployeePayrollProfile (
     EPPNote NVARCHAR(500) NULL,                      			-- 備註
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                         				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                         				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                         				-- 修改時間
     Sys_UpdateBy INT NULL,                              					-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -726,12 +728,12 @@ CREATE TABLE EmployeeCompensation (
     ESAmount DECIMAL(9,2) NOT NULL DEFAULT 0,    	-- 明細金額
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),  	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),  	-- 新增時間
     Sys_CreatedBy INT NOT NULL,                          				-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                          				-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                          				-- 修改時間
     Sys_UpdateBy INT NULL,                               					-- 修改人員 (FK)
     Sys_IsDelete BIT NOT NULL DEFAULT 0,                				-- 是否刪除 (0:false, 1:true)
-    Sys_DeleteDT DATETIME NULL,                          				-- 刪除時間
+    Sys_DeleteDT DATETIME2 NULL,                          				-- 刪除時間
     Sys_DeleteBy INT NULL,                               					-- 刪除人員 (FK)
 
     /*FK 設定*/
@@ -775,7 +777,7 @@ CREATE TABLE BankBranches (
     BBIsActive BIT NOT NULL DEFAULT 1,			-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 	-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 	-- 新增時間
 
     /*CHECK 設定*/
     CONSTRAINT CHK_BankBranches_IsActive CHECK (BBIsActive IN (0,1))
@@ -806,9 +808,9 @@ CREATE TABLE EmployeeBankAccounts (
     EBAIsActive BIT NOT NULL DEFAULT 1,		-- 是否啟用 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(), 		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(), 		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                     					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                     					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                     					-- 修改時間
     Sys_UpdateBy INT NULL,                          						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -867,9 +869,9 @@ CREATE TABLE AuthorizationItem (
     AIIsActive BIT NOT NULL DEFAULT 1,		-- 是否有效 (0:false, 1:true)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),		-- 新增時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		-- 新增時間
     Sys_CreatedBy INT NOT NULL,                     					-- 新增人員 (FK)
-    Sys_UpdateDT DATETIME NULL,                     					-- 修改時間
+    Sys_UpdateDT DATETIME2 NULL,                     					-- 修改時間
     Sys_UpdateBy INT NULL,                          						-- 修改人員 (FK)
 
     /*FK 設定*/
@@ -944,7 +946,7 @@ CREATE TABLE SysLoginLog (
     SLRID INT NOT NULL,                     			-- 原因編號 (FK)
 
     /*系統欄位*/
-    Sys_CreatedDT DATETIME NOT NULL DEFAULT GETDATE(),   -- 發生時間
+    Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),   -- 發生時間
 
     /*FK 設定*/
     CONSTRAINT FK_SysLoginLog_Employee FOREIGN KEY (EEID) REFERENCES Employee(EEID),
