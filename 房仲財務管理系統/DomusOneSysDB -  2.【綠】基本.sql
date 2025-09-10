@@ -12,23 +12,25 @@ GO
 
 -- Step 1: 建立 Employee 資料表（尚未加 FK）
 CREATE TABLE Employee (
-    EEID INT IDENTITY(1,1) PRIMARY KEY,		-- 員工編號
-    EEAccount CHAR(10) NOT NULL,			-- 身分證字號
-    EEPassword NVARCHAR(255) NOT NULL,	--密碼 (使用【雜湊 (SHA256 的 hash)】)
-    EEName NVARCHAR(50) NOT NULL,		--姓名
-    EEBirth DATE NOT NULL,					--生日
-    EEMail NVARCHAR(255) NOT NULL,		--電子信箱
-    EERegAddr NVARCHAR(255) NOT NULL,	--戶籍地址
-    EEMailAddr NVARCHAR(255) NOT NULL,	--通訊地址
-    EEIsActive BIT NOT NULL DEFAULT 1,		--狀態
-    EENote NVARCHAR(500) NULL,			--備註
-    EEPath NVARCHAR(500) NULL,			--員工照片路徑
+    EEID INT IDENTITY(1,1) PRIMARY KEY,				-- 員工編號
+    EEAccount CHAR(10) NOT NULL,					-- 身分證字號
+    EEPassword NVARCHAR(255) NOT NULL,			--密碼 (使用【雜湊 (SHA256 的 hash)】)
+    EEName NVARCHAR(50) NOT NULL,				--姓名
+    EEBirth DATE NOT NULL,							--生日
+    EEMail NVARCHAR(255) NOT NULL,				--電子信箱
+    EERegAddr NVARCHAR(255) NOT NULL,			--戶籍地址
+    EEMailAddr NVARCHAR(255) NOT NULL,			--通訊地址
+    EEIsActive BIT NOT NULL DEFAULT 1,				--狀態
+    EENote NVARCHAR(500) NULL,					--備註
+    EEPath NVARCHAR(500) NULL,					--員工照片路徑
+    EEIsTempPassword BIT NOT NULL DEFAULT 1,		--是否為暫時密碼
+    EEPasswordChangeDT DATETIME2 NOT NULL,		--密碼修改時間
 
     /*系統欄位*/
     Sys_CreatedDT DATETIME2 NOT NULL DEFAULT GETDATE(),		--新增時間
-    Sys_CreatedBy INT NULL,   								--新增人員 (先允許 NULL，避免 FK 錯誤)
-    Sys_UpdateDT DATETIME2 NULL,							--修改時間
-    Sys_UpdateBy INT NULL									--修改人員 (FK)
+    Sys_CreatedBy INT NULL,   									--新增人員 (先允許 NULL，避免 FK 錯誤)
+    Sys_UpdateDT DATETIME2 NULL,								--修改時間
+    Sys_UpdateBy INT NULL										--修改人員 (FK)
 );
 GO
 
@@ -46,21 +48,26 @@ EXEC sp_addextendedproperty N'MS_Description', N'通訊地址', N'Schema', N'dbo
 EXEC sp_addextendedproperty N'MS_Description', N'狀態', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEIsActive';
 EXEC sp_addextendedproperty N'MS_Description', N'備註', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EENote';
 EXEC sp_addextendedproperty N'MS_Description', N'照片', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEPath';
+EXEC sp_addextendedproperty N'MS_Description', N'是否為暫時密碼', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEIsTempPassword';
+EXEC sp_addextendedproperty N'MS_Description', N'密碼修改時間', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'EEPasswordChangeDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增時間', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_CreatedDT';
 EXEC sp_addextendedproperty N'MS_Description', N'新增人員', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_CreatedBy';
 EXEC sp_addextendedproperty N'MS_Description', N'修改時間', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_UpdateDT';
 EXEC sp_addextendedproperty N'MS_Description', N'修改人員', N'Schema', N'dbo', N'Table', N'Employee', N'Column', N'Sys_UpdateBy';
 GO
-
+	
 
 -- Step 2: 插入第一筆員工資料（系統管理員）
 INSERT INTO Employee (
     EEAccount, EEPassword, EEName, EEBirth,
-    EEMail, EERegAddr, EEMailAddr
+    EEMail, EERegAddr, EEMailAddr, EEPasswordChangeDT
 )
 VALUES (
     'ADMIN001', 'admin@123', '系統管理員', '1980-01-01',
-    'admin@example.com', '高雄市', '高雄市'
+    'admin@example.com', '高雄市', '高雄市',  GETDATE()
+
+--admin@123
+--admin@123456  "nuyFm%Z7"
 );
 GO
 
