@@ -1,0 +1,119 @@
+using DomusOne.Models;
+using DomusOne.Models.Data;
+using DomusOne.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace DomusOne.Controllers
+{
+    public class EmployeesController : Controller
+    {
+        private readonly DomusOneSysDBContextG2 _context;
+
+        public EmployeesController(DomusOneSysDBContextG2 context)
+        {
+            _context = context;
+        }
+
+        // GET: Employees
+        public async Task<IActionResult> Index(string CompanyID, string EEID, string EEName, string EEBirth)
+        {
+            // 1. 取得登入者公司ID（假設從 Claims 取得）
+            var userCompanyId = User.Claims.FirstOrDefault(c => c.Type == "CompanyID")?.Value;
+            // 預設公司選項只顯示登入者公司
+            var companyOptions = await _context.Company
+                .Where(c => c.COID.ToString() == userCompanyId)
+                .Select(c => new SelectListItem { Text = c.COName, Value = c.COID.ToString() })
+                .ToListAsync();
+
+            // 2. 取得現任人員名單（依公司ID）
+            List<SelectListItem> employeeOptions;
+            if (!string.IsNullOrEmpty(CompanyID))
+            {
+                // 依公司ID查詢現任人員（任職紀錄最新一筆且在職）
+                employeeOptions = await _context.EmployeeJobRecord
+                    .GroupBy(j => j.EEID)
+                    .Select(g => g.OrderByDescending(j => j.StartDate).FirstOrDefault())
+                    .Where(j => j.CompanyID.ToString() == CompanyID && j.IsCurrent)
+                    .Select(j => new SelectListItem { Text = j.Employee.EEName, Value = j.EEID.ToString() })
+                    .ToListAsync();
+            }
+            else
+            {
+                // 預設顯示登入者公司現任人員
+                employeeOptions = await _context.EmployeeJobRecord
+                    .GroupBy(j => j.EEID)
+                    .Select(g => g.OrderByDescending(j => j.StartDate).FirstOrDefault())
+                    .Where(j => j.CompanyID.ToString() == userCompanyId && j.IsCurrent)
+                    .Select(j => new SelectListItem { Text = j.Employee.EEName, Value = j.EEID.ToString() })
+                    .ToListAsync();
+            }
+
+            // 3. 設定查詢欄位型態與選項
+            var fields = new List<QueryFieldOption>
+            {
+                new QueryFieldOption { FieldName = "CompanyID", DisplayName = "公司", Type = "select", Options = companyOptions },
+                new QueryFieldOption { FieldName = "EEID", DisplayName = "員工", Type = "select", Options = employeeOptions },
+                new QueryFieldOption { FieldName = "EEName", DisplayName = "姓名", Type = "text", Placeholder = "請輸入姓名" },
+                new QueryFieldOption { FieldName = "EEBirth", DisplayName = "生日", Type = "date" }
+            };
+
+            // 4. 設定查詢預設值（如公司預設為登入者公司）
+            var queryValues = new Dictionary<string, string>
+            {
+                { "CompanyID", CompanyID ?? userCompanyId ?? "" },
+                { "EEID", EEID ?? "" },
+                { "EEName", EEName ?? "" },
+                { "EEBirth", EEBirth ?? "" }
+            };
+
+            // 5. 組成查詢 ViewModel，傳給 ViewBag
+            var vm = new QueryViewModel { Fields = fields, QueryValues = queryValues };
+            ViewBag.QueryVM = vm;
+
+            // 6. 查詢資料（根據查詢條件組合 LINQ）
+            var employees = _context.Employee.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(CompanyID))
+            {
+                // 依公司ID查詢現任人員
+                var currentEEIDs = await _context.EmployeeJobRecord
+                    .GroupBy(j => j.EEID)
+                    .Select(g => g.OrderByDescending(j => j.StartDate).FirstOrDefault())
+                    .Where(j => j.CompanyID.ToString() == CompanyID && j.IsCurrent)
+                    .Select(j => j.EEID)
+                    .ToListAsync();
+                employees = employees.Where(e => currentEEIDs.Contains(e.EEID));
+            }
+            if (!string.IsNullOrWhiteSpace(EEID))
+                employees = employees.Where(e => e.EEID.ToString() == EEID);
+            if (!string.IsNullOrWhiteSpace(EEName))
+                employees = employees.Where(e => e.EEName.Contains(EEName));
+            if (!string.IsNullOrWhiteSpace(EEBirth) && DateOnly.TryParse(EEBirth, out var birth))
+                employees = employees.Where(e => e.EEBirth == birth);
+
+            // 7. 回傳查詢結果給 View
+            return View(await employees.ToListAsync());
+        }
+
+        /// <summary>
+        /// 動態取得現任人員選項（依公司）
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetEmployeesByCompany(string companyId)
+        {
+            var employeeOptions = await _context.EmployeeJobRecord
+                .GroupBy(j => j.EEID)
+                .Select(g => g.OrderByDescending(j => j.StartDate).FirstOrDefault())
+                .Where(j => j.CompanyID.ToString() == companyId && j.IsCurrent)
+                .Select(j => new SelectListItem { Text = j.Employee.EEName, Value = j.EEID.ToString() })
+                .ToListAsync();
+            return Json(employeeOptions);
+        }
+
+        // 其他 Action ...
+    }
+}

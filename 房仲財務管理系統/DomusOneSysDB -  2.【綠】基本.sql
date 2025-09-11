@@ -67,7 +67,7 @@ VALUES (
     'admin@example.com', '高雄市', '高雄市',  GETDATE()
 
 --admin@123
---admin@123456  "nuyFm%Z7"
+--admin@123456  "FHcdRD2r"
 );
 GO
 
